@@ -106,6 +106,18 @@ const UserDropdown = () => {
                   <div className='flex items-center plb-2 pli-4'>
                     <Button
                       fullWidth
+                      variant='outlined'
+                      size='small'
+                      endIcon={<i className='ri-user-settings-line' />}
+                      onClick={e => handleDropdownClose(e, '/profile')}
+                      sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
+                    >
+                      Manage Profile
+                    </Button>
+                  </div>
+                  <div className='flex items-center plb-2 pli-4'>
+                    <Button
+                      fullWidth
                       variant='contained'
                       color='error'
                       size='small'

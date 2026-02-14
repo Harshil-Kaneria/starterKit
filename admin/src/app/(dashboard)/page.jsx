@@ -40,7 +40,6 @@ const DashboardAnalytics = () => {
                 <Button component={Link} href='/admin' variant='contained' startIcon={<i className='ri-shield-user-line' />}>
                   Manage Admins
                 </Button>
-                <Chip color='success' label='System Healthy' sx={{ fontWeight: 700 }} />
               </Stack>
             </Stack>
           </CardContent>

@@ -70,9 +70,6 @@ const Navigation = () => {
           <Link href='/'>
             <Logo />
           </Link>
-          <Typography variant='caption' color='text.secondary' sx={{ pl: 1.5, pt: 0.5, fontWeight: 600 }}>
-            Admin Operations
-          </Typography>
         </div>
         {isBreakpointReached && <i className='ri-close-line text-xl' onClick={() => toggleVerticalNav(false)} />}
       </NavHeader>

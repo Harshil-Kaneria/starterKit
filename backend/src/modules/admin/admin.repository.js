@@ -45,6 +45,9 @@ const listAdmins = (where = { isDeleted: false }, order = [['createdAt', 'DESC']
 const updateAdminBySecretId = (secretId, payload) =>
   Admin.update(payload, { where: { secretId, isDeleted: false } });
 
+const updateAdminPasswordBySecretId = (secretId, password) =>
+  Admin.update({ password }, { where: { secretId, isDeleted: false } });
+
 const softDeleteAdmin = (secretId) =>
   Admin.update({ isDeleted: true }, { where: { secretId, isDeleted: false } });
 
@@ -148,7 +151,7 @@ const getAdminStateSummary = async () => {
     Admin.count(),
     Admin.count({ where: { isDeleted: false } }),
     Admin.count({ where: { isDeleted: true } }),
-    Admin.count({ where: { adminType: 'superAdmin', isDeleted: false } })
+    Admin.count({ where: { adminType: 'superadmin', isDeleted: false } })
   ]);
 
   return {
@@ -184,6 +187,7 @@ module.exports = {
   createAdmin,
   listAdmins,
   updateAdminBySecretId,
+  updateAdminPasswordBySecretId,
   softDeleteAdmin,
   countUsers,
   countAdmins,

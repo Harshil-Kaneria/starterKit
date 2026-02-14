@@ -58,7 +58,7 @@ const VerticalMenu = ({ scrollMenu }) => {
           </MenuItem>
         </MenuSection>
         <MenuSection label='Management'>
-          <MenuItem icon={<i className='ri-group-2-line' />} href='/user' suffix={<Chip size='small' label='Ops' />}>
+          <MenuItem icon={<i className='ri-group-2-line' />} href='/user'>
             Users
           </MenuItem>
           <MenuItem icon={<i className='ri-shield-user-line' />} href='/admin'>
@@ -71,8 +71,8 @@ const VerticalMenu = ({ scrollMenu }) => {
           </MenuItem>
         </MenuSection>
         <MenuSection label='Quick Actions'>
-          <MenuItem icon={<i className='ri-add-large-fill' />} href='/admin/add' suffix={<Chip color='success' size='small' label='New' />}>
-            Create Admin
+          <MenuItem icon={<i className='ri-user-settings-line' />} href='/profile'>
+            Manage Profile
           </MenuItem>
         </MenuSection>
       </Menu>

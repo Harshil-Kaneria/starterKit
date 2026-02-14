@@ -59,6 +59,50 @@ const getProfile = async (secretId) => {
   return { user: profile };
 };
 
+const updateProfile = async (secretId, { name, email }) => {
+  const admin = await repo.findAdminBySecretId(secretId);
+  if (!admin) {
+    throw new AppError('Token mismatch', 401);
+  }
+
+  const duplicateAdmin = await repo.findAdminByEmailExcludeSecretId(email, secretId);
+  if (duplicateAdmin) {
+    throw new AppError('User already exists with same email', 409);
+  }
+
+  await repo.updateAdminBySecretId(secretId, { name, email });
+  await delCacheByPattern('admin:*');
+
+  const updatedAdmin = await repo.findAdminBySecretId(secretId);
+  const user = updatedAdmin.get();
+  delete user.password;
+  delete user.isDeleted;
+  delete user.updatedAt;
+
+  return { user };
+};
+
+const updatePassword = async (secretId, { currentPassword, newPassword }) => {
+  const admin = await repo.findAdminBySecretId(secretId);
+  if (!admin) {
+    throw new AppError('Token mismatch', 401);
+  }
+
+  const isCurrentPasswordValid = await verifyPassword(currentPassword, admin.password);
+  if (!isCurrentPasswordValid) {
+    throw new AppError('Current password is incorrect', 400);
+  }
+
+  const isSamePassword = await verifyPassword(newPassword, admin.password);
+  if (isSamePassword) {
+    throw new AppError('New password must be different from current password', 400);
+  }
+
+  const hashedPassword = await hashPassword(newPassword);
+  await repo.updateAdminPasswordBySecretId(secretId, hashedPassword);
+  await delCacheByPattern('admin:*');
+};
+
 const registerAdmin = async ({ email, password, name }) => {
   const existingAdmin = await repo.findAdminByEmail(email);
   if (existingAdmin) {
@@ -296,6 +340,8 @@ const getToolkitData = async () => {
 module.exports = {
   login,
   getProfile,
+  updateProfile,
+  updatePassword,
   registerAdmin,
   getAdminList,
   getAdminDetails,

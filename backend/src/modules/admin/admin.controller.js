@@ -20,6 +20,24 @@ const getProfileDetails = async (req, res, next) => {
   }
 };
 
+const updateProfile = async (req, res, next) => {
+  try {
+    const data = await service.updateProfile(req.loggedInUser.secretId, req.body);
+    return sendSuccess(req, res, StatusCodes.OK, 'Profile updated successfully !', data);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const updatePassword = async (req, res, next) => {
+  try {
+    await service.updatePassword(req.loggedInUser.secretId, req.body);
+    return sendSuccess(req, res, StatusCodes.OK, 'Password updated successfully !');
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const register = async (req, res, next) => {
   try {
     await service.registerAdmin(req.body);
@@ -122,6 +140,8 @@ const toolkit = async (req, res, next) => {
 module.exports = {
   login,
   getProfileDetails,
+  updateProfile,
+  updatePassword,
   register,
   list,
   details,

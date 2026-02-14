@@ -15,6 +15,14 @@ export const appApi = createApi({
       query: () => ({ url: '/api/v1/admin/get-profile', method: 'GET' }),
       providesTags: ['Auth']
     }),
+    adminUpdateProfile: builder.mutation({
+      query: body => ({ url: '/api/v1/admin/update-profile', method: 'POST', data: body }),
+      invalidatesTags: ['Auth']
+    }),
+    adminUpdatePassword: builder.mutation({
+      query: body => ({ url: '/api/v1/admin/update-password', method: 'POST', data: body }),
+      invalidatesTags: ['Auth']
+    }),
     adminDashboard: builder.query({
       query: () => ({ url: '/api/v1/admin/dashboards', method: 'GET' }),
       providesTags: ['Admin']
@@ -75,6 +83,8 @@ export const appApi = createApi({
 export const {
   useAdminLoginMutation,
   useAdminProfileQuery,
+  useAdminUpdateProfileMutation,
+  useAdminUpdatePasswordMutation,
   useAdminDashboardQuery,
   useAdminListQuery,
   useAdminToolkitQuery,

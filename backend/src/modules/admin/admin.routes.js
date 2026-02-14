@@ -9,6 +9,8 @@ const protectedRouter = express.Router();
 publicRouter.post('/admin/login', validate(validator.adminLoginValidationSchema), controller.login);
 
 protectedRouter.get('/admin/get-profile', controller.getProfileDetails);
+protectedRouter.post('/admin/update-profile', validate(validator.updateProfileValidator), controller.updateProfile);
+protectedRouter.post('/admin/update-password', validate(validator.updatePasswordValidator), controller.updatePassword);
 protectedRouter.get('/admin/admin-list', validate(validator.adminListQueryValidator), controller.list);
 protectedRouter.get('/admin/dashboards', controller.adminDashboards);
 protectedRouter.post('/admin/details', validate(validator.detailsAdminValidator), controller.details);

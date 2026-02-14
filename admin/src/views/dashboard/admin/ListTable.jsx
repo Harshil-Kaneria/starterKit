@@ -62,8 +62,8 @@ const ListTable = () => {
         <Chip
           size='small'
           label={row.adminType}
-          color={row.adminType === 'superAdmin' ? 'secondary' : 'primary'}
-          variant={row.adminType === 'superAdmin' ? 'filled' : 'outlined'}
+          color={row.adminType === 'superadmin' ? 'secondary' : 'primary'}
+          variant={row.adminType === 'superadmin' ? 'filled' : 'outlined'}
           sx={{ fontWeight: 700, textTransform: 'capitalize' }}
         />
       ),
@@ -73,7 +73,7 @@ const ListTable = () => {
       name: 'Actions',
       cell: row => (
         <Stack direction='row' spacing={1}>
-          {row.adminType !== 'superAdmin' ? (
+          {row.adminType !== 'superadmin' ? (
             <>
               <Tooltip title='Edit Admin'>
                 <IconButton color='primary' size='small' onClick={() => handleEdit(row)}>

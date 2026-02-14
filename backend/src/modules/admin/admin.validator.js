@@ -36,6 +36,20 @@ const detailsAdminValidator = {
   })
 };
 
+const updatePasswordValidator = {
+  body: Joi.object({
+    currentPassword: Joi.string().required(),
+    newPassword: Joi.string().min(6).required()
+  })
+};
+
+const updateProfileValidator = {
+  body: Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required()
+  })
+};
+
 const editPoliciesValidator = {
   body: Joi.object({
     type: Joi.string().valid('privacy_policy', 'terms_and_conditions').required(),
@@ -56,7 +70,7 @@ const adminListQueryValidator = {
     orderDirection: Joi.string().valid('ASC', 'DESC', 'asc', 'desc').optional(),
     start: Joi.number().integer().min(0).optional(),
     length: Joi.number().integer().min(1).max(200).optional(),
-    adminType: Joi.string().valid('superAdmin', 'admin').optional(),
+    adminType: Joi.string().valid('superadmin', 'admin').optional(),
     includeDeleted: Joi.boolean().truthy('true').falsy('false').optional(),
     fromDate: Joi.date().iso().optional(),
     toDate: Joi.date().iso().optional()
@@ -86,6 +100,8 @@ module.exports = {
   updateValidator,
   deleteAdminValidator,
   detailsAdminValidator,
+  updatePasswordValidator,
+  updateProfileValidator,
   editPoliciesValidator,
   deleteUserValidator,
   adminListQueryValidator,

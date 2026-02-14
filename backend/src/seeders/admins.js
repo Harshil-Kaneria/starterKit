@@ -11,9 +11,9 @@ exports.seed = async function (knex) {
         {
             name: 'Super Admin',
             password: generatedHashPassword,
-            email: 'superAdmin@admin.com',
+            email: 'admin@admin.com',
             secretId: uuid.v4(),
-            adminType: 'superAdmin'
+            adminType: 'superadmin'
         },
     ]);
 };

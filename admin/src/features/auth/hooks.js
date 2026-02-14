@@ -1,6 +1,8 @@
 import {
   useAdminLoginMutation as useAdminLoginRtkMutation,
-  useAdminProfileQuery as useAdminProfileRtkQuery
+  useAdminProfileQuery as useAdminProfileRtkQuery,
+  useAdminUpdateProfileMutation as useAdminUpdateProfileRtkMutation,
+  useAdminUpdatePasswordMutation as useAdminUpdatePasswordRtkMutation
 } from '@store/api/appApi'
 
 const normalizeError = error => {
@@ -32,5 +34,41 @@ export const useAdminProfileQuery = (enabled = true) => {
   return {
     ...queryState,
     error: normalizeError(queryState.error)
+  }
+}
+
+export const useAdminUpdatePasswordMutation = () => {
+  const [trigger, state] = useAdminUpdatePasswordRtkMutation()
+
+  const mutateAsync = async payload => {
+    try {
+      return await trigger(payload).unwrap()
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  }
+
+  return {
+    ...state,
+    error: normalizeError(state.error),
+    mutateAsync
+  }
+}
+
+export const useAdminUpdateProfileMutation = () => {
+  const [trigger, state] = useAdminUpdateProfileRtkMutation()
+
+  const mutateAsync = async payload => {
+    try {
+      return await trigger(payload).unwrap()
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  }
+
+  return {
+    ...state,
+    error: normalizeError(state.error),
+    mutateAsync
   }
 }
