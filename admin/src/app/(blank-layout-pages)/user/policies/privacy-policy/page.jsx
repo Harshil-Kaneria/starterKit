@@ -1,3 +1,5 @@
+import themeConfig from '@configs/themeConfig'
+
 // Component Imports
 import PolicyShow from '@views/PolicyShow'
 
@@ -5,8 +7,8 @@ import PolicyShow from '@views/PolicyShow'
 import { getServerMode } from '@core/utils/serverHelpers'
 
 export const metadata = {
-  title: 'Privacy policy - Nutriscan',
-  description: 'Privacy policy - Nutriscan'
+  title: `Privacy policy - ${themeConfig.templateName}`,
+  description: `Privacy policy - ${themeConfig.templateName}`
 }
 
 const policiesPage = () => {

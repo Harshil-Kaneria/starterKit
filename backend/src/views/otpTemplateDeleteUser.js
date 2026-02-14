@@ -1,10 +1,14 @@
-module.exports = (data) => `
+module.exports = (data) => {
+const appName = process.env.APP_NAME || 'Nutriscan'
+const supportEmail = process.env.SUPPORT_EMAIL || 'support@nutri-scan.com'
+
+return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nutriscan - OTP</title>
+    <title>${appName} - OTP</title>
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
@@ -97,7 +101,7 @@ module.exports = (data) => `
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>Welcome to Nutriscan!</h1>
+            <h1>Welcome to ${appName}!</h1>
         </div>
         <div class="body">
             <p>Hi there,</p>
@@ -109,10 +113,11 @@ module.exports = (data) => `
             <p>If you didn't request this, please ignore this email.</p>
         </div>
         <div class="footer">
-            <p>&copy; ${new Date().getFullYear()} Nutriscan. All rights reserved.</p>
-            <p>Need help? <a href="mailto:support@nutri-scan.com">Contact Support</a></p>
+            <p>&copy; ${new Date().getFullYear()} ${appName}. All rights reserved.</p>
+            <p>Need help? <a href="mailto:${supportEmail}">Contact Support</a></p>
         </div>
     </div>
 </body>
 </html>
 `
+}

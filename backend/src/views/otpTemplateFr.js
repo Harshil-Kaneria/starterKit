@@ -1,10 +1,14 @@
-module.exports = (data) => `
+module.exports = (data) => {
+const appName = process.env.APP_NAME || 'Nutriscan'
+const supportEmail = process.env.SUPPORT_EMAIL || 'support@nutri-scan.com'
+
+return `
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nutriscan - OTP</title>
+    <title>${appName} - OTP</title>
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
@@ -97,22 +101,23 @@ module.exports = (data) => `
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>Bienvenue chez NutriScan AI !</h1>
+            <h1>Bienvenue chez ${appName} !</h1>
         </div>
         <div class="body">
             <p>Bonjour,</p>
-            <p>Votre code de vérification pour vous connecter est:</p>
+            <p>Votre code de vÃ©rification pour vous connecter est:</p>
             <div class="otp-container">
                 <div class="otp-display">${data.otp}</div>
             </div>
             <p>Merci de le garder confidentiel</p>
-            <p>Merci d'avoir choisi NutriScan AI. Si vous n'avez pas demandé ceci, merci d'ignorer cette e-mail.</p>
+            <p>Merci d'avoir choisi ${appName}. Si vous n'avez pas demandÃ© ceci, merci d'ignorer cette e-mail.</p>
         </div>
         <div class="footer">
-            <p>&copy; ${new Date().getFullYear()} Nutriscan. Tous droits réservés.</p>
-            <p>Besoin d'aide ? <a href="mailto:support@nutri-scan.com">Contacter le support</a></p>
+            <p>&copy; ${new Date().getFullYear()} ${appName}. Tous droits rÃ©servÃ©s.</p>
+            <p>Besoin d'aide ? <a href="mailto:${supportEmail}">Contacter le support</a></p>
         </div>
     </div>
 </body>
 </html>
 `
+}

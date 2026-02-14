@@ -31,6 +31,8 @@ src/
 ## Environment
 
 ```env
+NEXT_PUBLIC_APP_NAME=NutriScan
+NEXT_PUBLIC_APP_COOKIE_NAME=nutriscan
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 NEXT_PUBLIC_RESPONSE_ENCRYPTION_ENABLED=true
 NEXT_PUBLIC_RESPONSE_ENCRYPTION_KEY=use_same_secret_as_backend

@@ -9,9 +9,12 @@
  *
  * Another way is to clear the cookie from the browser's Application/Storage tab and then reload the page.
  */
+const templateName = process.env.NEXT_PUBLIC_APP_NAME || 'Nutriscan'
+const settingsCookieName = process.env.NEXT_PUBLIC_APP_COOKIE_NAME || templateName.toLowerCase().replace(/\s+/g, '-')
+
 const themeConfig = {
-    templateName: 'Nutriscan',
-    settingsCookieName: 'nutriscan',
+    templateName,
+    settingsCookieName,
     mode: 'light', // 'light', 'dark'
     layoutPadding: 24, // Common padding for header, content, footer layout components (in px)
     compactContentWidth: 1440, // in px

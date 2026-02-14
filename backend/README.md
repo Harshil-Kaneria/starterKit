@@ -47,6 +47,8 @@ src/
 ## Required Environment Variables
 
 ```env
+APP_NAME=NutriScan
+SUPPORT_EMAIL=support@nutri-scan.com
 APP_PORT=8000
 DB_NAME=staterkit
 DB_DIALECT=mysql
@@ -70,6 +72,9 @@ METRICS_ENABLED=true
 LOG_LEVEL=info
 RESPONSE_ENCRYPTION_ENABLED=true
 RESPONSE_ENCRYPTION_KEY=replace_with_long_random_secret
+PLAY_SUBSCRIPTION_CLIENT_EMAIL=
+ANDROID_PACKAGE_NAME=
+ANDROID_PRODUCT_ID=
 ```
 
 Note:

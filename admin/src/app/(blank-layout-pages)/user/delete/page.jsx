@@ -1,3 +1,5 @@
+import themeConfig from '@configs/themeConfig'
+
 // Component Imports
 import DeleteUser from '@views/DeleteUser'
 
@@ -5,8 +7,8 @@ import DeleteUser from '@views/DeleteUser'
 import { getServerMode } from '@core/utils/serverHelpers'
 
 export const metadata = {
-  title: 'Delete user - Nutriscan',
-  description: 'Delete a user from the nutriscan.'
+  title: `Delete user - ${themeConfig.templateName}`,
+  description: `Delete a user from ${themeConfig.templateName}.`
 }
 
 const UserDeletePage = () => {

@@ -31,6 +31,7 @@ npm run dev
 Backend `.env`:
 
 ```env
+APP_NAME=NutriScan
 RESPONSE_ENCRYPTION_ENABLED=true
 RESPONSE_ENCRYPTION_KEY=your_shared_secret
 ```
@@ -38,6 +39,7 @@ RESPONSE_ENCRYPTION_KEY=your_shared_secret
 Admin `.env`:
 
 ```env
+NEXT_PUBLIC_APP_NAME=NutriScan
 NEXT_PUBLIC_RESPONSE_ENCRYPTION_ENABLED=true
 NEXT_PUBLIC_RESPONSE_ENCRYPTION_KEY=your_shared_secret
 ```

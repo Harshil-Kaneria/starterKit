@@ -1,9 +1,11 @@
+import themeConfig from '@configs/themeConfig'
+
 // Component Imports
 import PolicyShow from '@views/PolicyShow'
 
 export const metadata = {
-  title: 'About - Nutriscan',
-  description: 'About - Nutriscan'
+  title: `About - ${themeConfig.templateName}`,
+  description: `About - ${themeConfig.templateName}`
 }
 
 const AboutPage = () => {
