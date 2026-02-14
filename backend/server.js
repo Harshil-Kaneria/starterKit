@@ -4,6 +4,7 @@ const http = require('http');
 const app = require('./app');
 const logger = require('./src/shared/logger/logger');
 const { getNumber } = require('./src/config/runtime');
+require('./src/modules/cron/cron.scheduler');
 
 const port = getNumber('APP_PORT', 8000);
 const server = http.createServer(app);
