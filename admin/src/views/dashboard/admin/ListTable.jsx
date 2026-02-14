@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { useRouter } from 'next/navigation'
+import { Chip, IconButton, Stack, Tooltip } from '@mui/material'
 import DataTableComponent from '@components/DataTableComponent'
 import { toast } from 'react-toastify'
 import { useAdminListLazyQuery, useDeleteAdminMutation } from '@features/admin/hooks'
@@ -57,25 +58,36 @@ const ListTable = () => {
     {
       name: 'Type',
       selector: row => row.adminType,
+      cell: row => (
+        <Chip
+          size='small'
+          label={row.adminType}
+          color={row.adminType === 'superAdmin' ? 'secondary' : 'primary'}
+          variant={row.adminType === 'superAdmin' ? 'filled' : 'outlined'}
+          sx={{ fontWeight: 700, textTransform: 'capitalize' }}
+        />
+      ),
       sortable: true
     },
     {
       name: 'Actions',
       cell: row => (
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <Stack direction='row' spacing={1}>
           {row.adminType !== 'superAdmin' ? (
             <>
-              <i className='ri-edit-line text-[20px] text-primary' title='Edit' onClick={() => handleEdit(row)}></i>
-              <i
-                className='ri-delete-bin-2-line text-[20px] text-warning'
-                title='Delete'
-                onClick={() => handleDelete(row)}
-              ></i>
+              <Tooltip title='Edit Admin'>
+                <IconButton color='primary' size='small' onClick={() => handleEdit(row)}>
+                  <i className='ri-edit-line text-[18px]' />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title='Delete Admin'>
+                <IconButton color='warning' size='small' onClick={() => handleDelete(row)}>
+                  <i className='ri-delete-bin-2-line text-[18px]' />
+                </IconButton>
+              </Tooltip>
             </>
-          ) : (
-            <></>
-          )}
-        </div>
+          ) : null}
+        </Stack>
       ),
       ignoreRowClick: true,
       allowOverflow: true,

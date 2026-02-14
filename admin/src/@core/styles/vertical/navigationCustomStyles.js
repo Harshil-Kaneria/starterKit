@@ -6,20 +6,24 @@ const navigationCustomStyles = theme => {
     color: 'var(--mui-palette-text-primary)',
     zIndex: 'var(--drawer-z-index) !important',
     [`& .${verticalNavClasses.bgColorContainer}`]: {
-      backgroundColor: 'var(--mui-palette-background-default)'
+      background:
+        'linear-gradient(180deg, rgb(var(--mui-palette-primary-mainChannel) / 0.08) 0%, var(--mui-palette-background-default) 18%)'
     },
     [`& .${verticalNavClasses.header}`]: {
       paddingBlock: theme.spacing(5),
-      paddingInline: theme.spacing(5.5, 4)
+      paddingInline: theme.spacing(5.5, 4),
+      borderBottom: '1px solid var(--mui-palette-divider)'
     },
     [`& .${verticalNavClasses.container}`]: {
       transition: 'none',
-      borderColor: 'transparent',
+      borderColor: 'var(--mui-palette-divider)',
+      borderInlineEndWidth: '1px',
       [`& .${verticalNavClasses.toggled}`]: {
         boxShadow: 'var(--mui-customShadows-lg)'
       }
     },
     [`& .${menuClasses.root}`]: {
+      paddingBlockStart: theme.spacing(3),
       paddingBlockEnd: theme.spacing(2),
       paddingInlineEnd: theme.spacing(4)
     },

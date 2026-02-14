@@ -111,3 +111,19 @@ code {
   background-color: rgb(var(--mui-palette-info-mainChannel) / 0.08);
   border: 0;
 }
+
+.admin-page-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.admin-page-shell::before {
+  content: '';
+  position: absolute;
+  inset: -22px -10px auto -10px;
+  block-size: 180px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 20px;
+  background: radial-gradient(circle at 5% 10%, rgb(var(--mui-palette-primary-mainChannel) / 0.14) 0%, transparent 60%);
+}

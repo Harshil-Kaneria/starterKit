@@ -7,10 +7,11 @@ import { menuClasses } from '@menu/utils/menuClasses'
 const menuItemStyles = theme => {
   return {
     root: {
-      marginBlockStart: theme.spacing(1.5),
+      marginBlockStart: theme.spacing(1.25),
       [`&.${menuClasses.subMenuRoot}.${menuClasses.open} > .${menuClasses.button}, &.${menuClasses.subMenuRoot} > .${menuClasses.button}.${menuClasses.active}`]:
         {
-          backgroundColor: 'var(--mui-palette-action-selected) !important'
+          backgroundColor: 'var(--mui-palette-action-selected) !important',
+          border: '1px solid rgb(var(--mui-palette-primary-mainChannel) / 0.2)'
         },
       [`&.${menuClasses.disabled} > .${menuClasses.button}`]: {
         color: 'var(--mui-palette-text-disabled)',
@@ -24,26 +25,29 @@ const menuItemStyles = theme => {
           theme.direction === 'ltr'
             ? `linear-gradient(270deg, var(--mui-palette-primary-main), ${lighten(theme.palette.primary.main, 0.5)} 100%)`
             : `linear-gradient(270deg, ${lighten(theme.palette.primary.main, 0.5)}, var(--mui-palette-primary-main) 100%)`,
+        boxShadow: `0 8px 16px rgb(var(--mui-palette-primary-mainChannel) / 0.25)`,
         [`& .${menuClasses.icon}`]: {
           color: 'inherit'
         }
       }
     },
     button: ({ active }) => ({
-      paddingBlock: theme.spacing(2),
+      paddingBlock: theme.spacing(1.8),
       '&:has(.MuiChip-root)': {
         paddingBlock: theme.spacing(1.75)
       },
-      paddingInlineStart: theme.spacing(5.5),
-      paddingInlineEnd: theme.spacing(3.5),
-      borderStartEndRadius: 50,
-      borderEndEndRadius: 50,
+      paddingInlineStart: theme.spacing(4),
+      paddingInlineEnd: theme.spacing(3),
+      borderRadius: 12,
+      border: '1px solid transparent',
       ...(!active && {
         '&:hover, &:focus-visible': {
-          backgroundColor: 'var(--mui-palette-action-hover)'
+          backgroundColor: 'var(--mui-palette-action-hover)',
+          borderColor: 'var(--mui-palette-divider)'
         },
         '&[aria-expanded="true"]': {
-          backgroundColor: 'var(--mui-palette-action-selected)'
+          backgroundColor: 'var(--mui-palette-action-selected)',
+          borderColor: 'rgb(var(--mui-palette-primary-mainChannel) / 0.2)'
         }
       })
     }),

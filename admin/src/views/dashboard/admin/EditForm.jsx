@@ -7,12 +7,13 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 // MUI Imports
-import Card from '@mui/material/Card'
+import Alert from '@mui/material/Alert'
+import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import { toast } from 'react-toastify'
@@ -56,7 +57,7 @@ const EditForm = ({ secretId }) => {
   const handleSave = async (values, { setSubmitting }) => {
     try {
       const { password, ...otherValues } = values
-      let requestData = password ? values : otherValues
+      const requestData = password ? { ...values } : { ...otherValues }
       requestData.secretId = secretId
       const response = await updateMutation.mutateAsync(requestData)
       if (response.status) toast.success(response.message || 'Success !')
@@ -75,89 +76,90 @@ const EditForm = ({ secretId }) => {
   })
 
   return (
-    <Card>
-      <Formik
-        enableReinitialize
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSave}
-      >
-        {({ errors, touched, isSubmitting }) => (
-          <>
-            <CardHeader
-              action={
-                <Button
-                  type='submit'
-                  form='add-form'
-                  variant='outlined'
-                  color='primary'
-                  startIcon={<i className='ri-save-line'></i>}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Saving...' : 'Update'}
-                </Button>
-              }
-            />
-            <CardContent>
-              <Form id='add-form'>
-                <Grid container spacing={5}>
-                  <Grid item xs={12}>
-                    <Field
-                      as={TextField}
-                      name='name'
-                      fullWidth
-                      label='Name'
-                      placeholder='John Doe'
-                      error={touched.name && !!errors.name}
-                      helperText={touched.name && errors.name}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Field
-                      as={TextField}
-                      name='email'
-                      type='email'
-                      fullWidth
-                      label='Email'
-                      placeholder='johndoe@gmail.com'
-                      error={touched.email && !!errors.email}
-                      helperText={touched.email && errors.email}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Field
-                      as={TextField}
-                      name='password'
-                      fullWidth
-                      type={isPasswordShown ? 'text' : 'password'}
-                      label='Password'
-                      placeholder='············'
-                      error={touched.password && !!errors.password}
-                      helperText={touched.password && errors.password}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position='end'>
-                            <IconButton
-                              size='small'
-                              edge='end'
-                              onClick={handleClickShowPassword}
-                              onMouseDown={e => e.preventDefault()}
-                              aria-label='toggle password visibility'
-                            >
-                              <i className={isPasswordShown ? 'ri-eye-off-line' : 'ri-eye-line'} />
-                            </IconButton>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </Form>
-            </CardContent>
-          </>
-        )}
-      </Formik>
-    </Card>
+    <Formik enableReinitialize initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSave}>
+      {({ errors, touched, isSubmitting }) => (
+        <Form id='edit-form'>
+          <Stack sx={{ width: '100%', minWidth: 0, rowGap: 5 }}>
+            <Alert severity='info' icon={<i className='ri-shield-check-line' />}>
+              Update identity details below. Leave password empty if no password change is needed.
+            </Alert>
+            <Grid container spacing={5}>
+              <Grid item xs={12} md={6}>
+                <Field
+                  as={TextField}
+                  name='name'
+                  fullWidth
+                  label='Full Name'
+                  placeholder='John Doe'
+                  error={touched.name && !!errors.name}
+                  helperText={touched.name && errors.name}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Field
+                  as={TextField}
+                  name='email'
+                  type='email'
+                  fullWidth
+                  label='Work Email'
+                  placeholder='john@company.com'
+                  error={touched.email && !!errors.email}
+                  helperText={touched.email && errors.email}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Field
+                  as={TextField}
+                  name='password'
+                  fullWidth
+                  type={isPasswordShown ? 'text' : 'password'}
+                  label='New Password (Optional)'
+                  placeholder='********'
+                  error={touched.password && !!errors.password}
+                  helperText={touched.password && errors.password ? errors.password : 'Leave blank to keep existing password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <IconButton
+                          size='small'
+                          edge='end'
+                          onClick={handleClickShowPassword}
+                          onMouseDown={e => e.preventDefault()}
+                          aria-label='toggle password visibility'
+                        >
+                          <i className={isPasswordShown ? 'ri-eye-off-line' : 'ri-eye-line'} />
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Box
+              sx={{
+                px: 4,
+                py: 3,
+                borderRadius: 2,
+                border: '1px dashed var(--mui-palette-divider)',
+                backgroundColor: 'var(--mui-palette-action-hover)'
+              }}
+            >
+              <Typography variant='body2' color='text.secondary'>
+                Tip: Only rotate password when needed. This action impacts the admin account next login.
+              </Typography>
+            </Box>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent='flex-end'>
+              <Button variant='outlined' color='secondary' onClick={sendRoutes} startIcon={<i className='ri-arrow-left-line' />}>
+                Cancel
+              </Button>
+              <Button type='submit' variant='contained' color='primary' startIcon={<i className='ri-save-line' />} disabled={isSubmitting}>
+                {isSubmitting ? 'Updating...' : 'Update Admin'}
+              </Button>
+            </Stack>
+          </Stack>
+        </Form>
+      )}
+    </Formik>
   )
 }
 

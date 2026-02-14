@@ -6,11 +6,11 @@ import themeConfig from '@configs/themeConfig'
 
 const StyledMain = styled.main`
   padding: ${themeConfig.layoutPadding}px;
-  ${({ isContentCompact }) =>
+  ${({ isContentCompact, contentMaxWidth }) =>
     isContentCompact &&
     `
     margin-inline: auto;
-    max-inline-size: ${themeConfig.compactContentWidth}px;
+    max-inline-size: ${contentMaxWidth || themeConfig.compactContentWidth}px;
   `}
 `
 

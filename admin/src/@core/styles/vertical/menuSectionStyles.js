@@ -4,17 +4,17 @@ import { menuClasses } from '@menu/utils/menuClasses'
 const menuSectionStyles = theme => {
   return {
     root: {
-      marginBlockStart: theme.spacing(7),
+      marginBlockStart: theme.spacing(5),
       [`& .${menuClasses.menuSectionContent}`]: {
-        color: 'var(--mui-palette-text-disabled)',
+        color: 'var(--mui-palette-text-secondary)',
         paddingInline: '0 !important',
-        paddingBlock: `${theme.spacing(1.75)} !important`,
+        paddingBlock: `${theme.spacing(1.5)} !important`,
         gap: theme.spacing(2.5),
         '&:before': {
           content: '""',
           blockSize: 1,
           inlineSize: '0.875rem',
-          backgroundColor: 'var(--mui-palette-divider)'
+          backgroundColor: 'rgb(var(--mui-palette-primary-mainChannel) / 0.4)'
         },
         '&:after': {
           content: '""',
@@ -25,8 +25,11 @@ const menuSectionStyles = theme => {
       },
       [`& .${menuClasses.menuSectionLabel}`]: {
         flexGrow: 0,
-        fontSize: '13px',
-        lineHeight: 1.38462
+        fontSize: '11px',
+        lineHeight: 1.4,
+        textTransform: 'uppercase',
+        letterSpacing: '0.08em',
+        fontWeight: 700
       }
     }
   }

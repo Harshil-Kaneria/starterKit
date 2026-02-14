@@ -13,10 +13,14 @@ import Table from '@/views/dashboard/policies/ListTable'
 
 const AdminList = () => {
   return (
-    <Grid container spacing={6}>
+    <Grid container spacing={6} className='admin-page-shell'>
       <Grid item xs={12}>
-        <Card className='bs-full'>
-          <CardHeader title='Policies' />
+        <Card className='bs-full' sx={{ borderRadius: 3, border: '1px solid var(--mui-palette-divider)' }}>
+          <CardHeader
+            title='Policy Center'
+            subheader='Maintain platform trust documents and keep policy text up to date.'
+            sx={{ '& .MuiCardHeader-title': { fontWeight: 800 }, '& .MuiCardHeader-subheader': { maxWidth: 560 } }}
+          />
           <CardContent>
             <Table />
           </CardContent>

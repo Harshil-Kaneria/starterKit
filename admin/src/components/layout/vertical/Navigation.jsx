@@ -8,6 +8,7 @@ import Link from 'next/link'
 
 // MUI Imports
 import { styled, useTheme } from '@mui/material/styles'
+import Typography from '@mui/material/Typography'
 
 // Component Imports
 import VerticalNav, { NavHeader } from '@menu/vertical-menu'
@@ -65,9 +66,14 @@ const Navigation = () => {
     <VerticalNav customStyles={navigationCustomStyles(theme)}>
       {/* Nav Header including Logo & nav toggle icons  */}
       <NavHeader>
-        <Link href='/'>
-          <Logo />
-        </Link>
+        <div>
+          <Link href='/'>
+            <Logo />
+          </Link>
+          <Typography variant='caption' color='text.secondary' sx={{ pl: 1.5, pt: 0.5, fontWeight: 600 }}>
+            Admin Operations
+          </Typography>
+        </div>
         {isBreakpointReached && <i className='ri-close-line text-xl' onClick={() => toggleVerticalNav(false)} />}
       </NavHeader>
       <StyledBoxForShadow ref={shadowRef} />

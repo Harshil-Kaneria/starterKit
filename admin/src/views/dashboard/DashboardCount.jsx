@@ -9,6 +9,7 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
+import Divider from '@mui/material/Divider'
 import { toast } from 'react-toastify'
 import Grow from '@mui/material/Grow'
 import Fade from '@mui/material/Fade'
@@ -63,24 +64,42 @@ const DashboardCount = () => {
   }
 
   return (
-    <Card className='bs-full'>
-      <CardHeader title='Welcome' />
+    <Card className='bs-full' sx={{ borderRadius: 3, border: '1px solid var(--mui-palette-divider)' }}>
+      <CardHeader
+        title='Operations Snapshot'
+        subheader='Live view of key admin entities'
+        sx={{
+          '& .MuiCardHeader-title': { fontWeight: 800, fontSize: '1.1rem' },
+          '& .MuiCardHeader-subheader': { fontWeight: 500 }
+        }}
+      />
+      <Divider />
       <CardContent className='!pbs-5'>
         <Grid container spacing={2}>
           {data.map((item, index) => (
-            <Grid item xs={6} md={3} key={index}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               {/* Grow animation with staggered delay */}
               <Grow in={checked} style={{ transformOrigin: '0 0 0' }} timeout={1000}>
-                <div className='flex items-center gap-3'>
+                <div
+                  className='flex items-center justify-between gap-3 p-4 rounded-xl'
+                  style={{
+                    border: '1px solid var(--mui-palette-divider)',
+                    background:
+                      'linear-gradient(135deg, rgba(22, 119, 255, 0.12) 0%, rgba(22, 119, 255, 0.02) 55%, rgba(22, 119, 255, 0) 100%)'
+                  }}
+                >
                   <Fade in={checked} timeout={1500}>
-                    <CustomAvatar variant='rounded' color={item.color} className='shadow-xs'>
+                    <CustomAvatar variant='rounded' color={item.color} className='shadow-xs !is-12 !bs-12'>
                       <i className={item.icon}></i>
                     </CustomAvatar>
                   </Fade>
                   <div>
-                    <Typography variant='h5'>{item.stats}</Typography>
-                    <Typography>{item.title}</Typography>
+                    <Typography variant='h5' sx={{ fontWeight: 800 }}>
+                      {item.stats}
+                    </Typography>
+                    <Typography color='text.secondary'>{item.title}</Typography>
                   </div>
+                  <i className='ri-arrow-right-up-line text-primary text-[20px]' />
                 </div>
               </Grow>
             </Grid>

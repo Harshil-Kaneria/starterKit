@@ -39,7 +39,7 @@ const StyledSubMenu = styled.li`
   margin-block-start: 4px;
 
   &.${menuClasses.open} > .${menuClasses.button} {
-    background-color: #f3f3f3;
+    background-color: var(--mui-palette-action-selected);
   }
 
   ${({ menuItemStyles }) => menuItemStyles};

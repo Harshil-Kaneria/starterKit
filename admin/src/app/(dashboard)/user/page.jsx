@@ -1,9 +1,6 @@
 'use client'
 import { withAuth } from '@/context/WithAuth'
 
-// Next.js Imports
-import { useRouter } from 'next/navigation'
-
 // MUI Imports
 import Grid from '@mui/material/Grid'
 
@@ -15,13 +12,15 @@ import CardContent from '@mui/material/CardContent'
 import Table from '@/views/dashboard/user/ListTable'
 
 const UserList = () => {
-  const router = useRouter()
-
   return (
-    <Grid container spacing={6}>
+    <Grid container spacing={6} className='admin-page-shell'>
       <Grid item xs={12}>
-        <Card className='bs-full'>
-          <CardHeader title='Users' />
+        <Card className='bs-full' sx={{ borderRadius: 3, border: '1px solid var(--mui-palette-divider)' }}>
+          <CardHeader
+            title='User Directory'
+            subheader='Inspect registered users and remove suspicious or invalid accounts quickly.'
+            sx={{ '& .MuiCardHeader-title': { fontWeight: 800 }, '& .MuiCardHeader-subheader': { maxWidth: 560 } }}
+          />
           <CardContent>
             <Table />
           </CardContent>

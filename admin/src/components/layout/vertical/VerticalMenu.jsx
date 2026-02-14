@@ -1,11 +1,12 @@
 // MUI Imports
 import { useTheme } from '@mui/material/styles'
+import Chip from '@mui/material/Chip'
 
 // Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // Component Imports
-import { Menu, SubMenu, MenuItem, MenuSection } from '@menu/vertical-menu'
+import { Menu, MenuItem, MenuSection } from '@menu/vertical-menu'
 
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
@@ -51,27 +52,27 @@ const VerticalMenu = ({ scrollMenu }) => {
         renderExpandedMenuItemIcon={{ icon: <i className='ri-circle-line' /> }}
         menuSectionStyles={menuSectionStyles(theme)}
       >
-        <MenuSection label='Dashboards'>
+        <MenuSection label='Overview'>
           <MenuItem href='/' icon={<i className='ri-dashboard-horizontal-line' />}>
-            Dashboards
+            Command Center
           </MenuItem>
         </MenuSection>
-        <MenuSection label='Admin & User'>
-          <MenuItem icon={<i className='ri-group-2-line' />} href='/user'>
-            User
+        <MenuSection label='Management'>
+          <MenuItem icon={<i className='ri-group-2-line' />} href='/user' suffix={<Chip size='small' label='Ops' />}>
+            Users
           </MenuItem>
-          <SubMenu icon={<i className='ri-shield-user-line' />} label='Admin'>
-            <MenuItem icon={<i className='ri-add-large-fill' />} href='/admin/add'>
-              Add
-            </MenuItem>
-            <MenuItem icon={<i className='ri-table-line' />} href='/admin'>
-              View all
-            </MenuItem>
-          </SubMenu>
+          <MenuItem icon={<i className='ri-shield-user-line' />} href='/admin'>
+            Admins
+          </MenuItem>
         </MenuSection>
-        <MenuSection label='Policies'>
+        <MenuSection label='Content'>
           <MenuItem href='/policies' icon={<i className='ri-file-list-3-line' />}>
-            Privacy & About
+            Policies
+          </MenuItem>
+        </MenuSection>
+        <MenuSection label='Quick Actions'>
+          <MenuItem icon={<i className='ri-add-large-fill' />} href='/admin/add' suffix={<Chip color='success' size='small' label='New' />}>
+            Create Admin
           </MenuItem>
         </MenuSection>
       </Menu>

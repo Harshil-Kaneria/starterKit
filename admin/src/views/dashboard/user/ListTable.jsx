@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
+import { IconButton, Stack, Tooltip } from '@mui/material'
 import DataTableComponent from '@components/DataTableComponent'
 import { useDeleteUserMutation, useUserListLazyQuery } from '@features/user/hooks'
 import { toast } from 'react-toastify'
@@ -47,13 +48,13 @@ const ListTable = () => {
     {
       name: 'Actions',
       cell: row => (
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <i
-            className='ri-delete-bin-2-line text-[20px] text-warning'
-            title='Delete'
-            onClick={() => handleDelete(row)}
-          ></i>
-        </div>
+        <Stack direction='row' spacing={1}>
+          <Tooltip title='Delete User'>
+            <IconButton color='warning' size='small' onClick={() => handleDelete(row)}>
+              <i className='ri-delete-bin-2-line text-[18px]' />
+            </IconButton>
+          </Tooltip>
+        </Stack>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
