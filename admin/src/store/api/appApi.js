@@ -20,10 +20,6 @@ export const appApi = createApi({
       providesTags: ['Admin']
     }),
     adminList: builder.query({
-      query: () => ({ url: '/api/v1/admin/admin-list', method: 'GET' }),
-      providesTags: ['Admin']
-    }),
-    adminListByQuery: builder.query({
       query: params => ({ url: '/api/v1/admin/admin-list', method: 'GET', params }),
       providesTags: ['Admin']
     }),
@@ -81,7 +77,6 @@ export const {
   useAdminProfileQuery,
   useAdminDashboardQuery,
   useAdminListQuery,
-  useAdminListByQueryQuery,
   useAdminToolkitQuery,
   useAdminDetailsQuery,
   useUpdateAdminMutation,

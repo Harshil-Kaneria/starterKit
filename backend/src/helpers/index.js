@@ -84,6 +84,7 @@ const dataTableHelper = async (data = {}) => {
   const whereCondition = data.whereCondition || {};
   const query = data.query || {};
   const include = data.include || [];
+  const attributes = data.attributes || undefined;
   const orderColumnMap = data.orderColumnMap || {};
   const orderColumnWhitelist = data.orderColumnWhitelist || [];
 
@@ -96,7 +97,7 @@ const dataTableHelper = async (data = {}) => {
 
   const whereClause = {
     ...whereCondition,
-    ...(query.search
+    ...(query.search && searchableColumns.length
       ? {
           [Op.or]: searchableColumns.map((column) => ({ [column]: { [Op.like]: `%${query.search}%` } }))
         }
@@ -106,7 +107,8 @@ const dataTableHelper = async (data = {}) => {
   const options = {
     order: [[safeOrderColumn, safeOrderDirection]],
     where: whereClause,
-    include
+    include,
+    attributes
   };
 
   const [result, totalRecords] = await Promise.all([

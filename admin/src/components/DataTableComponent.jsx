@@ -31,8 +31,8 @@ const DataTableComponent = ({ fetchData, columns, searchable = true }) => {
       }
 
       const response = await fetchData(requestParams)
-      setRowsData(response.data)
-      setTotalRows(response.recordsTotal)
+      setRowsData(Array.isArray(response?.data) ? response.data : [])
+      setTotalRows(Number(response?.recordsTotal) || 0)
     } catch (err) {
       toast.error(err?.message || 'Something went wrong!')
     } finally {
@@ -72,10 +72,10 @@ const DataTableComponent = ({ fetchData, columns, searchable = true }) => {
   const handleSort = (column, sortDirection) => {
     const columnName = column.name || column.selector
     if (columnName) {
-      setSortData(prev => ({
+      setSortData({
         column: columnName,
-        direction: prev.column === columnName && prev.direction === 'asc' ? 'desc' : 'asc'
-      }))
+        direction: sortDirection
+      })
     }
   }
 

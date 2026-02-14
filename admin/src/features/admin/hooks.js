@@ -1,6 +1,6 @@
 import {
+  appApi,
   useAdminDashboardQuery as useAdminDashboardRtkQuery,
-  useAdminListByQueryQuery,
   useAdminListQuery as useAdminListRtkQuery,
   useAdminToolkitQuery as useAdminToolkitRtkQuery,
   useAdminDetailsQuery as useAdminDetailsRtkQuery,
@@ -8,6 +8,8 @@ import {
   useRegisterAdminMutation as useRegisterAdminRtkMutation,
   useUpdateAdminMutation as useUpdateAdminRtkMutation
 } from '@store/api/appApi'
+import { useCallback } from 'react'
+import { useDispatch } from 'react-redux'
 
 const normalizeError = error => {
   if (!error) return undefined
@@ -40,9 +42,35 @@ const useQueryCompat = queryState => ({
 
 export const useAdminDashboardQuery = () => useQueryCompat(useAdminDashboardRtkQuery())
 
-export const useAdminListQuery = () => useQueryCompat(useAdminListRtkQuery())
+export const useAdminListQuery = params => useQueryCompat(useAdminListRtkQuery(params))
 
-export const useAdminListByQuery = params => useQueryCompat(useAdminListByQueryQuery(params))
+export const useAdminListLazyQuery = () => {
+  const dispatch = useDispatch()
+
+  const fetchData = useCallback(
+    async params => {
+      const request = dispatch(
+        appApi.endpoints.adminList.initiate(params, {
+          forceRefetch: true,
+          subscribe: false
+        })
+      )
+
+      try {
+        return await request.unwrap()
+      } catch (error) {
+        throw normalizeError(error)
+      } finally {
+        request.unsubscribe?.()
+      }
+    },
+    [dispatch]
+  )
+
+  return {
+    fetchData
+  }
+}
 
 export const useAdminToolkitQuery = () => useQueryCompat(useAdminToolkitRtkQuery())
 

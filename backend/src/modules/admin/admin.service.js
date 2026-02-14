@@ -202,7 +202,7 @@ const editPolicy = async ({ type, content }) => {
   await delCacheByPattern('policy:*');
 };
 
-const getUsersDataTable = async (query) => {
+const getUsersDataTable = async (query = {}) => {
   const cacheKey = makeCacheKey(CACHE_KEYS.userListDataTable, query);
   const cacheData = await getCache(cacheKey);
   if (cacheData) {
@@ -245,12 +245,24 @@ const getToolkitData = async () => {
     data: {
       modules: {
         admin: {
-          query: ['search', 'adminType', 'includeDeleted', 'fromDate', 'toDate', 'start', 'length'],
+          query: [
+            'search',
+            'orderColumn',
+            'orderDirection',
+            'adminType',
+            'includeDeleted',
+            'fromDate',
+            'toDate',
+            'start',
+            'length'
+          ],
           state: admins
         },
         users: {
           query: [
             'search',
+            'orderColumn',
+            'orderDirection',
             'includeDeleted',
             'isProfileCompleted',
             'country',

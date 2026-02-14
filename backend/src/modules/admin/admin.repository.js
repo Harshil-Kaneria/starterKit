@@ -2,6 +2,20 @@ const { Op } = require('sequelize');
 const { Admin, User, Policies } = require('../../models');
 
 const isTrue = (value) => value === true || value === 'true';
+const ADMIN_LIST_ATTRIBUTES = ['id', 'secretId', 'name', 'email', 'adminType', 'isDeleted', 'createdAt', 'updatedAt'];
+const USER_LIST_ATTRIBUTES = [
+  'id',
+  'secretId',
+  'name',
+  'email',
+  'country',
+  'gender',
+  'goal',
+  'isProfileCompleted',
+  'isDeleted',
+  'createdAt',
+  'updatedAt'
+];
 
 const findAdminByEmail = (email) => Admin.findOne({ where: { email, isDeleted: false } });
 
@@ -24,7 +38,8 @@ const createAdmin = (payload) => Admin.create(payload);
 const listAdmins = (where = { isDeleted: false }, order = [['createdAt', 'DESC']]) =>
   Admin.findAll({
     where,
-    order
+    order,
+    attributes: ADMIN_LIST_ATTRIBUTES
   });
 
 const updateAdminBySecretId = (secretId, payload) =>
@@ -62,6 +77,7 @@ const buildAdminListQuery = async (query) => {
   return {
     model: Admin,
     query,
+    attributes: ADMIN_LIST_ATTRIBUTES,
     searchableColumns,
     whereCondition,
     orderColumnWhitelist: ['id', 'name', 'email', 'adminType', 'createdAt', 'updatedAt'],
@@ -107,6 +123,7 @@ const buildUserListQuery = async (query) => {
   const dataTableData = {
     model: User,
     query,
+    attributes: USER_LIST_ATTRIBUTES,
     searchableColumns,
     whereCondition,
     orderColumnWhitelist: ['id', 'name', 'email', 'gender', 'country', 'goal', 'isProfileCompleted', 'createdAt', 'updatedAt'],
