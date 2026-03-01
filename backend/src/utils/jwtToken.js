@@ -1,52 +1,82 @@
-require("dotenv").config();
-const jwt = require("jsonwebtoken");
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+const { getString } = require('../config/runtime');
+const { encryptToken, decryptToken } = require('./tokenCipher');
 
-const tokenSecret = process.env.JWT_SECRET || "fallbackRandomSecret";
-const ACCESS_TOKEN_EXPIRY = "365d";
-const REFRESH_TOKEN_EXPIRY = "365d";
+const ACCESS_TOKEN_EXPIRY = getString('JWT_ACCESS_TOKEN_EXPIRY', '15m');
+const REFRESH_TOKEN_EXPIRY = getString('JWT_REFRESH_TOKEN_EXPIRY', '30d');
+const JWT_ALGORITHM = 'RS256';
 
-const issueAccessToken = (payload) => {
-    return jwt.sign(payload, tokenSecret, {
-        algorithm: "HS256",
-        expiresIn: ACCESS_TOKEN_EXPIRY,
+const normalizePem = (value) => String(value || '').replace(/\\n/g, '\n').trim();
+
+const privateKey = normalizePem(getString('JWT_PRIVATE_KEY', ''));
+const defaultPublicKey = normalizePem(getString('JWT_PUBLIC_KEY', ''));
+const currentKeyId = getString('JWT_KEY_ID', 'main').trim();
+
+if (!privateKey) {
+  throw new Error('JWT_PRIVATE_KEY is required');
+}
+
+if (!defaultPublicKey) {
+  throw new Error('JWT_PUBLIC_KEY is required');
+}
+
+const parsePublicKeySet = () => {
+  const raw = getString('JWT_PUBLIC_KEYS_JSON', '').trim();
+  if (!raw) {
+    return { [currentKeyId]: defaultPublicKey };
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    const normalized = {};
+    Object.keys(parsed || {}).forEach((kid) => {
+      normalized[kid] = normalizePem(parsed[kid]);
     });
+    if (!normalized[currentKeyId]) {
+      normalized[currentKeyId] = defaultPublicKey;
+    }
+    return normalized;
+  } catch (error) {
+    throw new Error('JWT_PUBLIC_KEYS_JSON must be valid JSON object');
+  }
 };
 
-const issueRefreshToken = (payload) => {
-    return jwt.sign(payload, tokenSecret, {
-        algorithm: "HS256",
-        expiresIn: REFRESH_TOKEN_EXPIRY,
-    });
+const publicKeysByKid = parsePublicKeySet();
+
+const signToken = (payload, expiresIn) => {
+  const signedToken = jwt.sign(payload, privateKey, {
+    algorithm: JWT_ALGORITHM,
+    expiresIn,
+    header: {
+      kid: currentKeyId
+    }
+  });
+  return encryptToken(signedToken);
 };
 
-const verifyToken = (token, callback) => {
-    jwt.verify(token, tokenSecret, {}, (err, decoded) => {
-        if (err) {
-            return callback({ success: false, message: "Invalid token" }, null);
-        }
-        return callback(null, decoded);
-    });
+const resolvePublicKeyForToken = (rawToken) => {
+  const decodedHeader = jwt.decode(rawToken, { complete: true })?.header || {};
+  const kid = decodedHeader.kid || currentKeyId;
+  const publicKey = publicKeysByKid[kid];
+  if (!publicKey) {
+    throw new Error('Unknown JWT key id');
+  }
+  return publicKey;
 };
 
-const refreshToken = (refreshToken, cb) => {
-    jwt.verify(refreshToken, tokenSecret, {}, (err, decoded) => {
-        if (err) {
-            return cb({ success: false, message: "Invalid refresh token" });
-        }
+const issueAccessToken = (payload) => signToken(payload, ACCESS_TOKEN_EXPIRY);
 
-        const newAccessToken = jwt.sign(
-            { id: decoded.id, role: decoded.role },
-            tokenSecret,
-            { expiresIn: ACCESS_TOKEN_EXPIRY }
-        );
-        cb(null, { accessToken: newAccessToken });
-    });
+const issueRefreshToken = (payload) => signToken(payload, REFRESH_TOKEN_EXPIRY);
+
+const verifyToken = (token) => {
+  const rawToken = decryptToken(token);
+  const publicKey = resolvePublicKeyForToken(rawToken);
+  return jwt.verify(rawToken, publicKey, { algorithms: [JWT_ALGORITHM] });
 };
 
-// Export the utility functions
 module.exports = {
-    issueAccessToken,
-    issueRefreshToken,
-    verifyToken,
-    refreshToken,
+  issueAccessToken,
+  issueRefreshToken,
+  verifyToken
 };

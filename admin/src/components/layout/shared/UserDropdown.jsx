@@ -33,7 +33,7 @@ const BadgeContentSpan = styled('span')({
 
 const UserDropdown = () => {
   const { user } = useAuthState()
-  const { logout } = useAuthActions()
+  const { logout, logoutAll } = useAuthActions()
   // States
   const [open, setOpen] = useState(false)
 
@@ -118,11 +118,24 @@ const UserDropdown = () => {
                   <div className='flex items-center plb-2 pli-4'>
                     <Button
                       fullWidth
+                      variant='outlined'
+                      color='warning'
+                      size='small'
+                      endIcon={<i className='ri-shut-down-line' />}
+                      onClick={logoutAll}
+                      sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
+                    >
+                      Logout All Devices
+                    </Button>
+                  </div>
+                  <div className='flex items-center plb-2 pli-4'>
+                    <Button
+                      fullWidth
                       variant='contained'
                       color='error'
                       size='small'
                       endIcon={<i className='ri-logout-box-r-line' />}
-                      onClick={e => logout()}
+                      onClick={logout}
                       sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
                     >
                       Logout

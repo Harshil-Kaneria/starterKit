@@ -4,7 +4,6 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   user: null,
-  token: '',
   loading: true
 }
 
@@ -16,14 +15,12 @@ const authSlice = createSlice({
       state.loading = action.payload
     },
     setAuthSession: (state, action) => {
-      const { token, user } = action.payload || {}
-      state.token = token || ''
+      const { user } = action.payload || {}
       state.user = user || null
       state.loading = false
     },
     clearAuthSession: state => {
       state.user = null
-      state.token = ''
       state.loading = false
     }
   }

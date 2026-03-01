@@ -19,6 +19,8 @@ const EditForm = ({ type }) => {
   const updateMutation = usePolicyUpdateMutation()
   const editorRef = useRef(null)
   const [initialValues, setInitialValues] = useState({
+    id: null,
+    type: type || '',
     content: ''
   })
 
@@ -96,10 +98,14 @@ const EditForm = ({ type }) => {
 
   useEffect(() => {
     if (policyResponse?.status) {
-      const { content } = policyResponse.data
-      setInitialValues({ content: content || '' })
+      const { id, type: responseType, content } = policyResponse.data
+      setInitialValues({
+        id: id || null,
+        type: responseType || type || '',
+        content: content || ''
+      })
     }
-  }, [policyResponse])
+  }, [policyResponse, type])
 
   useEffect(() => {
     if (isError) {
@@ -122,7 +128,7 @@ const EditForm = ({ type }) => {
 
   const handleSave = async (values, { setSubmitting }) => {
     try {
-      const requestData = { ...values, type }
+      const requestData = { ...values, type: values.type || type }
       const response = await updateMutation.mutateAsync(requestData)
       if (response.status) toast.success(response.message || 'Success !')
     } catch (err) {
@@ -134,6 +140,7 @@ const EditForm = ({ type }) => {
   }
 
   const validationSchema = Yup.object().shape({
+    id: Yup.number().required('Policy id is required'),
     content: Yup.string().required('Content is required')
   })
 

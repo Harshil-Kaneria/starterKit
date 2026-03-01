@@ -1,7 +1,6 @@
 exports.seed = async function (knex) {
     return knex("policies").then(async function () {
-        const moment = require("moment");
-        const currentDateTime = moment().utc().format("YY-MM-DD HH:mm:ss");
+        const currentDateTime = knex.fn.now();
         const policies = [
             {
                 id: 1,

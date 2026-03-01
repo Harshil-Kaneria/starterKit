@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import { appApi } from '@store/api/appApi'
 import { clearAuthSession, setAuthLoading, setAuthSession } from '@store/slices/authSlice'
+import axiosInstance from '@services/axiosInstance'
 
 const formatUser = userData => ({
   secretId: userData?.secretId,
@@ -15,7 +16,6 @@ const formatUser = userData => ({
 
 export const useAuthState = () =>
   useSelector(state => ({
-    token: state.auth.token,
     user: state.auth.user,
     loading: state.auth.loading
   }))
@@ -25,14 +25,9 @@ export const useAuthActions = () => {
   const router = useRouter()
 
   const login = useCallback(
-    (token, user) => {
-      if (token) {
-        localStorage.setItem('token', token)
-      }
-
+    (user) => {
       dispatch(
         setAuthSession({
-          token,
           user: formatUser(user)
         })
       )
@@ -42,8 +37,23 @@ export const useAuthActions = () => {
     [dispatch, router]
   )
 
-  const logout = useCallback(() => {
-    localStorage.removeItem('token')
+  const logout = useCallback(async () => {
+    try {
+      await axiosInstance.post('/public/api/v1/auth/logout')
+    } catch (error) {
+      // Ignore logout network errors and clear local session state anyway.
+    }
+    dispatch(clearAuthSession())
+    dispatch(appApi.util.resetApiState())
+    router.push('/login')
+  }, [dispatch, router])
+
+  const logoutAll = useCallback(async () => {
+    try {
+      await axiosInstance.post('/api/v1/auth/logout-all')
+    } catch (error) {
+      // Ignore logout-all network errors and clear local session state anyway.
+    }
     dispatch(clearAuthSession())
     dispatch(appApi.util.resetApiState())
     router.push('/login')
@@ -51,7 +61,8 @@ export const useAuthActions = () => {
 
   return {
     login,
-    logout
+    logout,
+    logoutAll
   }
 }
 
@@ -66,29 +77,20 @@ export const useAuthBootstrap = () => {
     const bootstrap = async () => {
       dispatch(setAuthLoading(true))
 
-      const token = localStorage.getItem('token')
-      if (!token) {
-        dispatch(clearAuthSession())
-        return
-      }
-
       try {
         const response = await dispatch(appApi.endpoints.adminProfile.initiate(undefined, { forceRefetch: true })).unwrap()
 
         if (response?.status) {
           dispatch(
             setAuthSession({
-              token,
               user: formatUser(response.user)
             })
           )
           return
         }
 
-        localStorage.removeItem('token')
         dispatch(clearAuthSession())
       } catch {
-        localStorage.removeItem('token')
         dispatch(clearAuthSession())
       }
     }

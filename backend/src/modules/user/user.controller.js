@@ -1,6 +1,8 @@
 const { StatusCodes } = require('http-status-codes');
 const service = require('./user.service');
 const { sendSuccess } = require('../../shared/http/response');
+const authService = require('../auth/auth.service');
+const { setAuthCookies, setCsrfCookie } = require('../../utils/authCookies');
 
 const loginRegister = async (req, res, next) => {
   try {
@@ -14,6 +16,14 @@ const loginRegister = async (req, res, next) => {
 const verifyOtp = async (req, res, next) => {
   try {
     const data = await service.verifyOtp(req.body);
+    const tokens = await authService.createSessionAndTokens({
+      secretId: data.secretId,
+      loginType: 'user',
+      req
+    });
+    setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
+    setCsrfCookie(res);
+    data.token = tokens.accessToken;
     return sendSuccess(req, res, StatusCodes.OK, 'OTP verified successfully!', data);
   } catch (error) {
     return next(error);

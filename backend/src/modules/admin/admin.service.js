@@ -1,5 +1,4 @@
 const { uuid } = require('unique-string-generator');
-const { issueAccessToken } = require('../../utils/jwtToken');
 const { verifyPassword, hashPassword } = require('../../utils/passwordBcrypt');
 const { dataTableHelper } = require('../../helpers');
 const repo = require('./admin.repository');
@@ -29,18 +28,12 @@ const login = async ({ email, password }) => {
     throw new AppError('Incorrect Password', 400);
   }
 
-  const token = issueAccessToken({
-    secretId: user.secretId,
-    loginType: 'admin'
-  });
-
   const safeUser = user.get();
   delete safeUser.password;
 
   return {
     data: {
-      user: safeUser,
-      token
+      user: safeUser
     }
   };
 };

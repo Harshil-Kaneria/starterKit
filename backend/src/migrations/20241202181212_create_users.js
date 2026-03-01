@@ -1,6 +1,4 @@
 exports.up = function (knex) {
-    const moment = require('moment');
-    const currentUtcTime = moment.utc();
     return knex.schema.createTable("users", function (table) {
         table.increments("id").primary().index();
         table.string("secretId").notNullable().index();
@@ -33,8 +31,8 @@ exports.up = function (knex) {
         table.boolean("isProfileCompleted").defaultTo(false)
         table.boolean("isNotificationOn").defaultTo(true)
         table.boolean("isDeleted").defaultTo(false)
-        table.timestamp("updatedAt").defaultTo(currentUtcTime.format('YYYY-MM-DD HH:mm:ss'));
-        table.timestamp("createdAt").defaultTo(currentUtcTime.format('YYYY-MM-DD HH:mm:ss'));
+        table.timestamp("updatedAt").defaultTo(knex.fn.now());
+        table.timestamp("createdAt").defaultTo(knex.fn.now());
     });
 };
 

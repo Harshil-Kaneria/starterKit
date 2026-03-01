@@ -3,11 +3,6 @@
 import axiosInstance from '@services/axiosInstance'
 import { decryptApiPayload } from '@services/responseCrypto'
 
-const getToken = () => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : ''
-  return token ? `Bearer ${token}` : ''
-}
-
 const normalizeError = async error => {
   if (error?.response?.data) {
     const errorData = await decryptApiPayload(error.response.data)
@@ -19,15 +14,13 @@ const normalizeError = async error => {
 
 export const axiosBaseQuery =
   () =>
-  async ({ url, method = 'GET', data, params, auth = true }) => {
+  async ({ url, method = 'GET', data, params }) => {
     try {
-      const headers = auth ? { Authorization: getToken() } : {}
       const response = await axiosInstance({
         url,
         method,
         data,
-        params,
-        headers
+        params
       })
 
       const decrypted = await decryptApiPayload(response.data)

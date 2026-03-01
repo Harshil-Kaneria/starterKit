@@ -23,7 +23,7 @@ const userResendOtpValidationSchema = {
 
 const userUploadProfilePictureValidationSchema = {
   body: Joi.object({
-    profileImage: Joi.string().required()
+    profileImage: Joi.string().uri().required()
   })
 };
 

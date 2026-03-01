@@ -24,7 +24,7 @@ const storage = typeof window !== 'undefined' ? createWebStorage('local') : crea
 const authPersistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['user', 'token']
+  whitelist: ['user']
 }
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer)

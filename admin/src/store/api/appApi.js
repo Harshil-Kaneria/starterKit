@@ -9,7 +9,7 @@ export const appApi = createApi({
   tagTypes: ['Admin', 'Policy', 'User', 'Auth', 'Toolkit'],
   endpoints: builder => ({
     adminLogin: builder.mutation({
-      query: body => ({ url: '/public/api/v1/admin/login', method: 'POST', data: body, auth: false })
+      query: body => ({ url: '/public/api/v1/admin/login', method: 'POST', data: body })
     }),
     adminProfile: builder.query({
       query: () => ({ url: '/api/v1/admin/get-profile', method: 'GET' }),
@@ -52,15 +52,15 @@ export const appApi = createApi({
       invalidatesTags: ['Admin', 'Toolkit']
     }),
     policyByType: builder.query({
-      query: type => ({ url: '/public/api/v1/policies', method: 'POST', data: { type } }),
+      query: type => ({ url: `/public/api/v1/policies/by-type/${type}`, method: 'GET' }),
       providesTags: (result, error, type) => [{ type: 'Policy', id: type }]
     }),
     policiesList: builder.query({
-      query: () => ({ url: '/api/v1/admin/get-policies', method: 'GET' }),
+      query: () => ({ url: '/api/v1/policies', method: 'GET' }),
       providesTags: ['Policy']
     }),
     policyUpdate: builder.mutation({
-      query: body => ({ url: '/api/v1/admin/edit-policies', method: 'POST', data: body }),
+      query: body => ({ url: `/api/v1/policies/${body.id}`, method: 'PUT', data: { type: body.type, content: body.content } }),
       invalidatesTags: (result, error, body) => ['Policy', { type: 'Policy', id: body?.type }]
     }),
     userList: builder.query({
@@ -76,6 +76,9 @@ export const appApi = createApi({
     }),
     deleteUserEmailVerifyOtp: builder.mutation({
       query: body => ({ url: '/public/api/v1/user/delete-user-verify-otp', method: 'POST', data: body })
+    }),
+    authLogoutAll: builder.mutation({
+      query: () => ({ url: '/api/v1/auth/logout-all', method: 'POST' })
     })
   })
 })
@@ -99,5 +102,6 @@ export const {
   useLazyUserListQuery,
   useDeleteUserMutation,
   useDeleteUserEmailOtpMutation,
-  useDeleteUserEmailVerifyOtpMutation
+  useDeleteUserEmailVerifyOtpMutation,
+  useAuthLogoutAllMutation
 } = appApi

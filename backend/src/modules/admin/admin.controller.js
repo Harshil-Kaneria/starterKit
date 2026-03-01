@@ -1,10 +1,21 @@
 const { StatusCodes } = require('http-status-codes');
 const service = require('./admin.service');
 const { sendSuccess } = require('../../shared/http/response');
+const authService = require('../auth/auth.service');
+const { setAuthCookies, setCsrfCookie } = require('../../utils/authCookies');
 
 const login = async (req, res, next) => {
   try {
     const data = await service.login(req.body);
+    const { user } = data.data;
+    const tokens = await authService.createSessionAndTokens({
+      secretId: user.secretId,
+      loginType: 'admin',
+      req
+    });
+    setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
+    setCsrfCookie(res);
+    data.data.token = tokens.accessToken;
     return sendSuccess(req, res, StatusCodes.OK, 'Login successfully !', data);
   } catch (error) {
     return next(error);
