@@ -33,7 +33,7 @@ const passwordSchema = Yup.object().shape({
 
 const ManageProfileForm = () => {
   const dispatch = useDispatch()
-  const { user } = useAuthState()
+  const { user, token } = useAuthState()
   const { data: profileResponse } = useAdminProfileQuery(true)
   const updatePasswordMutation = useAdminUpdatePasswordMutation()
   const updateProfileMutation = useAdminUpdateProfileMutation()
@@ -56,6 +56,7 @@ const ManageProfileForm = () => {
 
         dispatch(
           setAuthSession({
+            token,
             user: {
               secretId: updatedUser?.secretId || user?.secretId,
               adminType: updatedUser?.adminType || user?.adminType,

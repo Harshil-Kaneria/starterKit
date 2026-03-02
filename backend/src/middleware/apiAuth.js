@@ -1,34 +1,24 @@
+const jwt = require('jsonwebtoken');
 const { Admin, User } = require('../models');
+const { getString } = require('../config/runtime');
 const { AppError } = require('../shared/http/errors');
-const { verifyToken } = require('../utils/jwtToken');
-const { parseCookies } = require('../utils/cookies');
-const { ACCESS_COOKIE_NAME } = require('../utils/authCookies');
 
 module.exports = async (req, res, next) => {
   try {
-    const cookies = parseCookies(req.headers.cookie || '');
-    let token = cookies[ACCESS_COOKIE_NAME];
-
-    if (!token) {
-      const authHeader = req.headers.authorization;
-      if (!authHeader) {
-        throw new AppError('Authorization header or auth cookie is required', 401);
-      }
-
-      const parts = authHeader.split(' ');
-      if (parts.length !== 2 || !/^Bearer$/i.test(parts[0])) {
-        throw new AppError('Format is Authorization: Bearer [token]', 401);
-      }
-
-      token = parts[1];
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      throw new AppError('Authorization header is required', 401);
     }
 
-    const decodedToken = verifyToken(token);
+    const parts = authHeader.split(' ');
+    if (parts.length !== 2 || !/^Bearer$/i.test(parts[0])) {
+      throw new AppError('Format is Authorization: Bearer [token]', 401);
+    }
+
+    const token = parts[1];
+    const decodedToken = jwt.verify(token, getString('JWT_SECRET', ''));
 
     if (!decodedToken || !decodedToken.secretId) {
-      throw new AppError('Token mismatch', 401);
-    }
-    if (decodedToken.tokenType && decodedToken.tokenType !== 'access') {
       throw new AppError('Token mismatch', 401);
     }
 

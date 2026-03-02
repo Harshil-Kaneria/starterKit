@@ -1,7 +1,6 @@
 const express = require('express');
 const apiAuth = require('../middleware/apiAuth');
 
-const { publicRouter: authPublicRouter, protectedRouter: authProtectedRouter } = require('../modules/auth/auth.routes');
 const { publicRouter: adminPublicRouter, protectedRouter: adminProtectedRouter } = require('../modules/admin/admin.routes');
 const { publicRouter: userPublicRouter, protectedRouter: userProtectedRouter } = require('../modules/user/user.routes');
 const { publicRouter: policyPublicRouter, protectedRouter: policyProtectedRouter } = require('../modules/policy/policy.routes');
@@ -9,13 +8,11 @@ const { publicRouter: policyPublicRouter, protectedRouter: policyProtectedRouter
 const publicV1Router = express.Router();
 const protectedV1Router = express.Router();
 
-publicV1Router.use(authPublicRouter);
 publicV1Router.use(adminPublicRouter);
 publicV1Router.use(userPublicRouter);
 publicV1Router.use(policyPublicRouter);
 
 protectedV1Router.use(apiAuth);
-protectedV1Router.use(authProtectedRouter);
 protectedV1Router.use(adminProtectedRouter);
 protectedV1Router.use(userProtectedRouter);
 protectedV1Router.use(policyProtectedRouter);

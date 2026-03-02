@@ -2,13 +2,11 @@ require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
+const multer = require('multer');
 
 require('./src/config/database');
 
 const { applySecurityMiddlewares } = require('./src/middleware/security');
-const csrfProtection = require('./src/middleware/csrfProtection');
-const { getString } = require('./src/config/runtime');
-const { STORAGE_DRIVER } = require('./src/utils/fileStorage');
 const requestIdMiddleware = require('./src/middleware/requestId');
 const httpLogger = require('./src/shared/logger/httpLogger');
 const { metricsMiddleware, metricsHandler } = require('./src/shared/metrics');
@@ -17,6 +15,7 @@ const notFound = require('./src/middleware/notFound');
 const { publicV1Router, protectedV1Router } = require('./src/routes');
 
 const app = express();
+const upload = multer();
 
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
@@ -24,14 +23,11 @@ app.set('trust proxy', 1);
 app.use(requestIdMiddleware);
 app.use(httpLogger);
 applySecurityMiddlewares(app);
-app.use(csrfProtection);
 app.use(metricsMiddleware);
 
-if (STORAGE_DRIVER === 'local') {
-  const localUploadDir = getString('LOCAL_UPLOAD_DIR', 'uploads');
-  app.use(express.static(localUploadDir));
-  app.use('/uploads', express.static(path.join(__dirname, localUploadDir)));
-}
+app.use(upload.any());
+app.use(express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 app.get('/metrics', metricsHandler);

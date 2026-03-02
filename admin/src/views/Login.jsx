@@ -52,7 +52,7 @@ const Login = ({ mode }) => {
       if (response.status) {
         toast.success(response.message || 'Success !')
         let data = response.data
-        login(data.user)
+        login(data.token, data.user)
       }
     } catch (err) {
       toast.error(err?.message || 'Something went wrong !')

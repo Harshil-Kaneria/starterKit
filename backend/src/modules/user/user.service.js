@@ -1,9 +1,9 @@
 const { UniqueOTP, uuid } = require('unique-string-generator');
+const { issueAccessToken } = require('../../utils/jwtToken');
 const { verifyPassword, hashPassword } = require('../../utils/passwordBcrypt');
 const { sendMail } = require('../../helpers');
 const { AppError } = require('../../shared/http/errors');
 const repo = require('./user.repository');
-const { assertValidStoredFileUrl } = require('../../utils/fileStorage');
 const otpTemplate = require('../../views/otpTemplate');
 const otpTemplateFr = require('../../views/otpTemplateFr');
 const otpTemplateDeleteUser = require('../../views/otpTemplateDeleteUser');
@@ -53,9 +53,15 @@ const verifyOtp = async ({ secretId, otp }) => {
   user.otp = null;
   await user.save();
 
+  const token = issueAccessToken({
+    secretId: user.secretId,
+    loginType: 'user'
+  });
+
   return {
     secretId: user.secretId,
-    isProfileCompleted: user.isProfileCompleted
+    isProfileCompleted: user.isProfileCompleted,
+    token
   };
 };
 
@@ -80,10 +86,6 @@ const updateProfile = async (userId, updateFields) => {
     throw new AppError('User not found!', 404);
   }
 
-  if (updateFields.profileImage !== undefined) {
-    assertValidStoredFileUrl(updateFields.profileImage, 'profileImage');
-  }
-
   Object.keys(updateFields).forEach((field) => {
     if (updateFields[field] !== undefined && field !== 'secretId' && field !== 'id') {
       user[field] = updateFields[field];
@@ -95,7 +97,6 @@ const updateProfile = async (userId, updateFields) => {
 };
 
 const updateProfilePhoto = async (userId, profileImage) => {
-  assertValidStoredFileUrl(profileImage, 'profileImage');
   await repo.updateUserById(userId, { profileImage });
   return { profileImage };
 };

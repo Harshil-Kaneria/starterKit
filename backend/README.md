@@ -51,35 +51,12 @@ APP_NAME=NutriScan
 SUPPORT_EMAIL=support@nutri-scan.com
 APP_PORT=8000
 DB_NAME=staterkit
-DB_DIALECT=postgres
-DB_PORT=5432
+DB_DIALECT=mysql
+DB_PORT=3306
 DB_HOST=localhost
-DB_USER=postgres
+DB_USER=root
 DB_PASS=
-DB_SSL_ENABLED=false
-DB_SSL_REJECT_UNAUTHORIZED=true
-DB_POOL_MIN=2
-DB_POOL_MAX=20
-DB_POOL_ACQUIRE_MS=30000
-DB_POOL_IDLE_MS=10000
-DB_POOL_EVICT_MS=1000
-JWT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
-JWT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----"
-JWT_KEY_ID=main
-JWT_PUBLIC_KEYS_JSON={"main":"-----BEGIN PUBLIC KEY-----\\n...\\n-----END PUBLIC KEY-----"}
-JWT_ACCESS_TOKEN_EXPIRY=15m
-JWT_REFRESH_TOKEN_EXPIRY=30d
-JWT_TOKEN_ENCRYPTION_KEY=replace_with_long_random_secret
-AUTH_COOKIE_SECURE=false
-AUTH_COOKIE_SAMESITE=lax
-AUTH_COOKIE_DOMAIN=
-FILE_STORAGE_DRIVER=s3
-LOCAL_UPLOAD_DIR=uploads
-S3_REGION=
-S3_BUCKET=
-S3_ACCESS_KEY_ID=
-S3_SECRET_ACCESS_KEY=
-S3_PUBLIC_BASE_URL=
+JWT_SECRET=replace_with_strong_secret
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=465
 MAIL_USER=
@@ -108,11 +85,9 @@ Note:
 - `helmet` enabled
 - CORS allowlist via `CORS_ORIGINS`
 - Global rate limiter (Redis-backed when Redis enabled)
-- CSRF protection (`x-csrf-token` must match `csrf_token` cookie for state-changing authenticated requests)
 - JWT auth middleware with admin/user route protection
 - Request ID propagated as `x-request-id`
 - Uniform error responses
-- No global multipart parser; file URLs are expected from external storage (S3 flow)
 
 ## Redis Caching
 
@@ -150,8 +125,6 @@ Public:
 - `POST /public/api/v1/user/delete-user`
 - `POST /public/api/v1/user/delete-user-verify-otp`
 - `POST /public/api/v1/policies`
-- `POST /public/api/v1/auth/refresh`
-- `POST /public/api/v1/auth/logout`
 
 Protected:
 
@@ -170,13 +143,12 @@ Protected:
 - `POST /api/v1/user/update-profile-photo`
 - `POST /api/v1/user/update-fcm-timezone`
 - `GET /api/v1/user/details`
-- `POST /api/v1/auth/logout-all`
 
 ## Setup
 
 ```bash
 npm install
-npm run db:migrate
-npm run db:seed
+knex migrate:latest --env=staging
+knex seed:run --env=staging
 npm run dev
 ```
